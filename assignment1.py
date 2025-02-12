@@ -10,13 +10,13 @@ from collections import defaultdict
 def load_data(file_path):
     """ Reads the dataset and tokenizes text """
     if not os.path.exists(file_path):
-        print(f"❌ Error: File not found at {file_path}")
+        print(f" Error: File not found at {file_path}")
         exit(1)
 
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    print(f"✅ Loaded {len(lines)} reviews from {file_path}")
+    print(f" Loaded {len(lines)} reviews from {file_path}")
     return [line.strip().split() for line in lines]
 
 
