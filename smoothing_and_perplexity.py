@@ -112,7 +112,7 @@ def compute_perplexity(test_data, unigram_probs, bigram_probs, smoothing_probs):
 # ===========================
 
 # Set dataset paths (Update these if needed)
-dataset_dir = os.path.join(os.getcwd(), "A1_DATASET")
+dataset_dir = os.path.join(os.getcwd())
 train_path = os.path.join(dataset_dir, "train.txt")
 valid_path = os.path.join(dataset_dir, "val.txt")
 
