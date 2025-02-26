@@ -2,7 +2,9 @@ import os
 import math
 from collections import defaultdict
 
+
 # Step 1: Load & Preprocess Data
+
 def load_data(file_path):
     if not os.path.exists(file_path):
         print(f"Error: File not found at {file_path}")
@@ -32,7 +34,6 @@ def build_vocab(train_data, threshold=1):
 
     return processed_data, vocab
 
-
 # Step 2: Train Unigram & Bigram Models
 
 def train_ngram_models(train_data):
@@ -52,7 +53,6 @@ def train_ngram_models(train_data):
     bigram_probs = {(w1, w2): count / unigram_counts[w1] for (w1, w2), count in bigram_counts.items()}
 
     return unigram_probs, bigram_probs, unigram_counts, bigram_counts
-
 
 # Step 3: Implement Smoothing
 
@@ -101,28 +101,23 @@ def compute_unigram_perplexity(test_data, unigram_probs):
 
     return math.exp(total_log_prob / total_words)
 
-
 # Step 5: Main Execution
 
-# Set dataset paths (Update these if needed)
+# Set dataset path
 dataset_dir = os.path.join(os.getcwd())
-train_path = os.path.join(dataset_dir, "train.txt")
-valid_path = os.path.join(dataset_dir, "val.txt")
-
-# Verify dataset paths
-print(f"Looking for train file at: {train_path}")
-print(f"Looking for validation file at: {valid_path}")
-
-# Load data
-train_data = load_data(train_path)
-valid_data = load_data(valid_path)
-
-# Preprocessing: Handle Unknown Words
-processed_train, vocab = build_vocab(train_data)
-processed_valid = [[word if word in vocab else "<UNK>" for word in sentence] for sentence in valid_data]
 
 # Train Models
+train_path = os.path.join(dataset_dir, "train.txt")
+print(f"Looking for train file at: {train_path}")
+train_data = load_data(train_path)
+processed_train, vocab = build_vocab(train_data)
 unigram_probs, bigram_probs, unigram_counts, bigram_counts = train_ngram_models(processed_train)
+
+#Validation 
+valid_path = os.path.join(dataset_dir, "val.txt")
+print(f"Looking for validation file at: {valid_path}")
+valid_data = load_data(valid_path)
+processed_valid = [[word if word in vocab else "<UNK>" for word in sentence] for sentence in valid_data]
 
 # Apply Smoothing
 vocab_size = len(vocab)
