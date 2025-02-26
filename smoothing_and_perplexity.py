@@ -2,9 +2,8 @@ import os
 import math
 from collections import defaultdict
 
-# ===========================
+
 # Step 1: Load & Preprocess Data
-# ===========================
 
 def load_data(file_path):
     """ Reads the dataset and tokenizes text """
@@ -37,9 +36,9 @@ def build_vocab(train_data, threshold=1):
 
     return processed_data, vocab
 
-# ===========================
+
 # Step 2: Train Unigram & Bigram Models
-# ===========================
+
 
 def train_ngram_models(train_data):
     """ Train Unigram and Bigram models """
@@ -60,9 +59,9 @@ def train_ngram_models(train_data):
 
     return unigram_probs, bigram_probs, unigram_counts, bigram_counts
 
-# ===========================
+
 # Step 3: Implement Smoothing
-# ===========================
+
 
 def laplace_smoothing(bigram_counts, unigram_counts, vocab_size):
     """ Apply Laplace (Add-1) smoothing to bigram probabilities """
@@ -82,9 +81,9 @@ def add_k_smoothing(bigram_counts, unigram_counts, vocab_size, k=0.1):
 
     return smoothed_probs
 
-# ===========================
+
 # Step 4: Compute Perplexity
-# ===========================
+
 
 def compute_perplexity(test_data, smoothed_probs, unigram_probs, vocab_size):
     """ Calculate Perplexity for a given model """
@@ -114,9 +113,9 @@ def compute_unigram_perplexity(test_data, unigram_probs):
 
     return math.exp(total_log_prob / total_words)
 
-# ===========================
+
 # Step 5: Main Execution
-# ===========================
+
 
 # Set dataset paths (Update these if needed)
 dataset_dir = os.path.join(os.getcwd())
