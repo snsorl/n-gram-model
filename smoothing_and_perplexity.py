@@ -149,9 +149,9 @@ perplexity_laplace_valid = compute_perplexity(processed_valid, laplace_probs, un
 perplexity_add_k_valid = compute_perplexity(processed_valid, add_k_probs, unigram_probs, vocab_size)
 
 # Print Final Results
-print("\n------------ RESULTS --------------")
+print("\n      RESULTS")
 print(f"Validation Perplexity (Unigram): {perplexity_unigram_valid:.6f}")
 print(f"Validation Perplexity (Bigram, Unsmoothed): {perplexity_unsmoothed_valid:.6f}")
 print(f"Validation Perplexity (Bigram, Laplace Smoothing): {perplexity_laplace_valid:.6f}")
 print(f"Validation Perplexity (Bigram, Add-k Smoothing, k=0.01): {perplexity_add_k_valid:.6f}")
-print("------------------------------")
+
