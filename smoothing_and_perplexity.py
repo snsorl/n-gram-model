@@ -2,11 +2,8 @@ import os
 import math
 from collections import defaultdict
 
-
 # Step 1: Load & Preprocess Data
-
 def load_data(file_path):
-    """ Reads the dataset and tokenizes text """
     if not os.path.exists(file_path):
         print(f"Error: File not found at {file_path}")
         exit(1)
@@ -18,7 +15,6 @@ def load_data(file_path):
     return [line.strip().split() for line in lines]
 
 def build_vocab(train_data, threshold=1):
-    """ Create a vocabulary and replace low-frequency words with <UNK> """
     word_counts = defaultdict(int)
 
     for sentence in train_data:
@@ -39,9 +35,7 @@ def build_vocab(train_data, threshold=1):
 
 # Step 2: Train Unigram & Bigram Models
 
-
 def train_ngram_models(train_data):
-    """ Train Unigram and Bigram models """
     unigram_counts = defaultdict(int)
     bigram_counts = defaultdict(int)
     total_words = 0
@@ -62,9 +56,7 @@ def train_ngram_models(train_data):
 
 # Step 3: Implement Smoothing
 
-
 def laplace_smoothing(bigram_counts, unigram_counts, vocab_size):
-    """ Apply Laplace (Add-1) smoothing to bigram probabilities """
     smoothed_probs = {}
 
     for (w1, w2), count in bigram_counts.items():
@@ -73,7 +65,6 @@ def laplace_smoothing(bigram_counts, unigram_counts, vocab_size):
     return smoothed_probs
 
 def add_k_smoothing(bigram_counts, unigram_counts, vocab_size, k=0.1):
-    """ Apply Add-k smoothing to bigram probabilities """
     smoothed_probs = {}
 
     for (w1, w2), count in bigram_counts.items():
@@ -84,9 +75,7 @@ def add_k_smoothing(bigram_counts, unigram_counts, vocab_size, k=0.1):
 
 # Step 4: Compute Perplexity
 
-
 def compute_perplexity(test_data, smoothed_probs, unigram_probs, vocab_size):
-    """ Calculate Perplexity for a given model """
     total_log_prob = 0
     total_words = 0
 
@@ -101,7 +90,6 @@ def compute_perplexity(test_data, smoothed_probs, unigram_probs, vocab_size):
 
 # Compute Unigram Perplexity
 def compute_unigram_perplexity(test_data, unigram_probs):
-    """ Compute Perplexity for a unigram model """
     total_log_prob = 0
     total_words = 0
 
@@ -115,7 +103,6 @@ def compute_unigram_perplexity(test_data, unigram_probs):
 
 
 # Step 5: Main Execution
-
 
 # Set dataset paths (Update these if needed)
 dataset_dir = os.path.join(os.getcwd())
@@ -140,18 +127,23 @@ unigram_probs, bigram_probs, unigram_counts, bigram_counts = train_ngram_models(
 # Apply Smoothing
 vocab_size = len(vocab)
 laplace_probs = laplace_smoothing(bigram_counts, unigram_counts, vocab_size)
-add_k_probs = add_k_smoothing(bigram_counts, unigram_counts, vocab_size, k=0.01)
 
-# Compute Perplexity on Training and Validation Sets
+# Define a range of k values to test
+k_values = [0.001, 0.01, 0.1, 0.2, 0.5, 1.0]
+
+# Compute Perplexity on Validation Set
 perplexity_unigram_valid = compute_unigram_perplexity(processed_valid, unigram_probs)
 perplexity_unsmoothed_valid = compute_perplexity(processed_valid, bigram_probs, unigram_probs, vocab_size)
 perplexity_laplace_valid = compute_perplexity(processed_valid, laplace_probs, unigram_probs, vocab_size)
-perplexity_add_k_valid = compute_perplexity(processed_valid, add_k_probs, unigram_probs, vocab_size)
 
 # Print Final Results
 print("\n      RESULTS")
 print(f"Validation Perplexity (Unigram): {perplexity_unigram_valid:.6f}")
 print(f"Validation Perplexity (Bigram, Unsmoothed): {perplexity_unsmoothed_valid:.6f}")
 print(f"Validation Perplexity (Bigram, Laplace Smoothing): {perplexity_laplace_valid:.6f}")
-print(f"Validation Perplexity (Bigram, Add-k Smoothing, k=0.01): {perplexity_add_k_valid:.6f}")
 
+# Test each k value
+for k in k_values:
+    add_k_probs = add_k_smoothing(bigram_counts, unigram_counts, vocab_size, k=k)
+    perplexity = compute_perplexity(processed_valid, add_k_probs, unigram_probs, vocab_size)
+    print(f"Validation Perplexity (Add-k Smoothing, k={k}): {perplexity:.6f}")
